@@ -25,9 +25,14 @@ fn main() {
 
     // let book_list: Vec<&Book> = Vec::new();
     //let book_list: librarian::BookList = V
-    let book_list = librarian::BookList::new();
+    let mut book_list = librarian::BookList::new();
     
     println!("What command would you like to run?");
-    crate::librarian::BookList::add(book_list);
+    
+    book_list.list.push( Book {title: "harry potter".to_string(), author: "jk asshole".to_string(), year_published: 2000, pages: 450});
+    book_list.list.push( Book {title: "the hunger games".to_string(), author: "suzanne collins".to_string(), year_published: 2010, pages: 400});
+    //crate::librarian::BookList::add(&mut book_list);
+    //crate::librarian::
+    crate::librarian::BookList::search(&book_list, None);
     command_prompt();
 }

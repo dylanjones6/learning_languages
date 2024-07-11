@@ -1,12 +1,13 @@
 pub mod book {
 
     use std::fmt;
-
+    
+    #[derive(PartialEq)]
     pub struct Book {
         pub title: String,
-        author: String,
-        year_published: u32,
-        pages: u32,
+        pub author: String,
+        pub year_published: u32,
+        pub pages: u32,
     }
     
     impl Book {
@@ -138,7 +139,7 @@ pub mod librarian {
     use crate::book::Book;
 
     pub struct BookList {
-        list: Vec<Book>,
+        pub list: Vec<Book>,
     }
 
     impl BookList {
@@ -149,26 +150,39 @@ pub mod librarian {
         }
 
         pub fn add(&mut self) {
-            let book_title: String = get_book_content(0);
+            let title: String = get_book_content(0);
             let author: String = get_book_content(1);
             let year_pub: u32 = get_book_content(2).parse().expect("Could not parse into u32!");
             let pages: u32 = get_book_content(3).parse().expect("Could not parse into u32!");
-            let book = Book::new(book_title, author, year_pub, pages);
+            let book = Book::new(title.clone(), author, year_pub, pages);
             println!("{}", &book);
-            self.list.push(book);
+            if self.search(Some(title.clone())) == None {
+                self.list.push(book);
+            } else {
+                eprintln!("{} already found in book list! Try adding \
+                    something else", title);
+            }
         }
         
-        pub fn search(&self) -> &Book {
-            let book_title: String = get_book_content(0);
-            for i in &self.list {
-                println!("{i}");
+        pub fn search(&self, title: Option<String>) -> Option<&Book> {
+            let title = if title == None {get_book_content(0)} else {String::from(title.unwrap())};
+            if self.list.len() > 0 {
+                for book in &self.list {
+                    // println!("{i}");
+                    // println!("{}", book.title);
+                    if title == book.title {
+                        // println!("{}", &book);
+                        return Some(book)
+                    }
+                }
             }
-            self.list[0]
+            None
         }
 
-        // pub fn remove(&self) -> Book {
-        //     // let book_title: String = get_book
-        // }
+
+        pub fn remove(&self) -> Book {
+            let title: String = get_book_content(0);
+        }
 
         fn write(&self) {
             // let mut tmpfile: File = temp
@@ -182,8 +196,6 @@ pub mod librarian {
         }
 
     }
-
-
 
     fn get_book_content(content_ind: u8) -> String {
         match content_ind {
