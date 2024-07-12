@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use todo3::todo::{add, list};
+use todo3::todo::{add, check, list};
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -44,7 +44,8 @@ fn main() {
             add(item_name.to_owned());
         }
         Some(Commands::Check { item_name }) => {
-            println!("checking off {item_name}");
+            // println!("checking off {item_name}");
+            check(item_name.to_owned());
         }
         Some(Commands::List {}) => {
             list();
